@@ -1,0 +1,86 @@
+[
+    {
+        "id": 1,
+        "name": "สมศรี มากแสง",
+        "title": "ผู้ช่วยศาสตราจารย์",
+        "position": "รองอธิการบดีฝ่ายการศึกษาและดิจิทัล",
+        "email": "somsi@tsu.ac.th",
+        "phone": "+66869851574",
+        "office_phone": "+66869851574",
+        "address": "140 ถ.กาญจวนิช ตำบล เขารูปช้าง อำเภอเมืองสงขลา สงขลา 90000",
+        "organization": "Thaksin University",
+        "profile_image": "image/profile1.jpg",
+        "country": "Thailand",
+        "social": {
+            "line": "https://line.me/ti/p/username",
+            "facebook": "https://facebook.com/username",
+            "youtube": "https://www.youtube.com/watch?v=Y5ykCBT9TCo",
+            "instagram": "https://instagram.com/username",
+            "twitter": "https://twitter.com/username",
+            "linkedin": "https://linkedin.com/in/username"
+        }
+    },
+    {
+        "id": 2,
+        "name": "จิราภา สุดา",
+        "title": "อาจารย์",
+        "position": "หัวหน้าภาควิชาคอมพิวเตอร์",
+        "email": "jira@tsu.ac.th",
+        "phone": "+66898965432",
+        "office_phone": "+66898965432",
+        "address": "123 ถ.เพชรเกษม ตำบล อำเภอเมืองสงขลา สงขลา 90000",
+        "organization": "Thaksin University",
+        "profile_image": "image/profile2.jpg",
+        "country": "Thailand",
+        "social": {
+            "line": "https://line.me/ti/p/username",
+            "facebook": "https://facebook.com/username",
+            "youtube": "https://youtube.com/channel/username",
+            "instagram": "https://instagram.com/username",
+            "twitter": "https://twitter.com/username",
+            "linkedin": "https://linkedin.com/in/username"
+        }
+    },
+    {
+        "id": 3,
+        "name": "ทิพย์พา บุญสูง",
+        "title": "อาจารย์",
+        "position": "หัวหน้าภาควิชาวิทยาการคอมพิวเตอร์",
+        "email": "tippa@tsu.ac.th",
+        "phone": "+66875634123",
+        "office_phone": "+66875634123",
+        "address": "456 ถ.รัตนาธิเบศร์ ตำบล เขารูปช้าง อำเภอเมืองสงขลา สงขลา 90000",
+        "organization": "Thaksin University",
+        "profile_image": "image/profile3.jpg",
+        "country": "Thailand",
+        "social": {
+            "line": "https://line.me/ti/p/username",
+            "facebook": "https://facebook.com/username",
+            "youtube": "https://youtube.com/channel/username",
+            "instagram": "https://instagram.com/username",
+            "twitter": "https://twitter.com/username",
+            "linkedin": "https://linkedin.com/in/username"
+        }
+    },
+    {
+        "id": 4,
+        "name": "พีรพล สุขสม",
+        "title": "ดร.",
+        "position": "รองคณบดีฝ่ายการศึกษา",
+        "email": "peerapon@tsu.ac.th",
+        "phone": "+66891234567",
+        "office_phone": "+66891234567",
+        "address": "789 ถ.สุราษฎร์ ตำบล สงขลา อำเภอเมืองสงขลา สงขลา 90000",
+        "organization": "Thaksin University",
+        "profile_image": "image/profile4.jpg",
+        "country": "Thailand",
+        "social": {
+            "line": "https://line.me/ti/p/username",
+            "facebook": "https://facebook.com/username",
+            "youtube": "https://youtube.com/channel/username",
+            "instagram": "https://instagram.com/username",
+            "twitter": "https://twitter.com/username",
+            "linkedin": "https://linkedin.com/in/username"
+        }
+    }
+]
