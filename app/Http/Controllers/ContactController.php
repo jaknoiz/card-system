@@ -43,42 +43,43 @@ private function generateVCF(Contact $contact): string
 {
     $vcf = [
         "BEGIN:VCARD",
-        "VERSION:3.0",
+        "VERSION:4.0",
         "FN:" . ($contact->name ?? 'N/A'),
         "ORG:" . ($contact->organization ?? 'N/A'),
-        "TITLE:" . ($contact->position ?? ''),  // เพิ่มตำแหน่ง (position) ที่นี่
-        "ROLE:" . ($contact->position ?? ''),  // หากต้องการแสดงตำแหน่งอีกครั้งในฟิลด์ ROLE
+        "TITLE:" . ($contact->position ?? ''),
         "EMAIL:" . ($contact->email ?? ''),
-        "TEL;TYPE=CELL:" . ($contact->phone ?? ''),
-        "TEL;TYPE=WORK:" . ($contact->office_phone ?? ''),
-        "ADR;TYPE=WORK:;;" . ($contact->address ?? '') . ";;;;" . ($contact->country ?? ''),
+        "TEL;TYPE=CELL:" . ($contact->phone ?? 'N/A'),
+        "TEL;TYPE=WORK:" . ($contact->office_phone ?? 'N/A'),
+        "ADR;TYPE=WORK:;;" . ($contact->address ?? 'N/A') . ";;;;",
     ];
 
-    // ตรวจสอบและเพิ่มรูปภาพโปรไฟล์ใน VCF
-    if ($contact->profile_image && Storage::exists($contact->profile_image)) {
-        // ใช้ Storage::url เพื่อดึง URL ที่ถูกต้อง
-        $imagePath = Storage::path($contact->profile_image);
-        
-        // อ่านเนื้อหาภาพจากไฟล์และแปลงเป็น Base64
-        $imageContent = file_get_contents($imagePath);
-        $base64Image = base64_encode($imageContent);
-        $mimeType = 'image/jpeg'; // หรือ mime type ที่เหมาะสมสำหรับไฟล์ของคุณ
+    // จัดการรูปภาพ
+    if ($contact->profile_image && Storage::disk('public')->exists($contact->profile_image)) {
+        $imagePath = Storage::disk('public')->path($contact->profile_image);
 
-        // เพิ่มข้อมูลรูปภาพใน VCF
-        $vcf[] = "PHOTO;ENCODING=b;TYPE={$mimeType}:{$base64Image}";
-    }
+        // ตรวจสอบไฟล์และ MIME type
+        if (file_exists($imagePath) && is_readable($imagePath)) {
+            $mimeType = mime_content_type($imagePath);
 
-    // ตรวจสอบว่า $contact->social เป็น array หรือไม่
-    if (!empty($contact->social) && is_array($contact->social)) {
-        foreach ($contact->social as $type => $url) {
-            $vcf[] = "X-SOCIALPROFILE;TYPE={$type}:{$url}";
+            if (strpos($mimeType, 'image/') === 0) {
+                $imageContent = file_get_contents($imagePath);
+                $base64Image = base64_encode($imageContent);
+                $photoHeader = "PHOTO;ENCODING=b;TYPE=" . strtoupper(explode('/', $mimeType)[1]) . ":";
+                $photoContent = wordwrap($base64Image, 75, "\r\n ", true); // ตัด Base64 ให้ถูกต้อง
+                $vcf[] = $photoHeader . $photoContent;
+            }
         }
     }
 
     $vcf[] = "END:VCARD";
 
-    return implode("\n", $vcf);
+    return implode("\r\n", $vcf);
 }
+
+
+
+
+
 
 
 
@@ -111,6 +112,7 @@ private function generateVCF(Contact $contact): string
 {
     $data = $request->validate([
         'name' => 'required|string|max:255',
+        'title' => 'nullable|string|max:255',
         'position' => 'nullable|string|max:255',
         'email' => 'required|email|unique:contacts,email',
         'phone' => 'nullable|string|max:20',
@@ -146,6 +148,7 @@ private function generateVCF(Contact $contact): string
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
+            'title' => 'nullable|string|max:255',
             'position' => 'nullable|string|max:255',
             'email' => 'required|email|unique:contacts,email,' . $contact->id,
             'phone' => 'nullable|string|max:20',

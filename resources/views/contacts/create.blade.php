@@ -18,10 +18,18 @@
                 <small class="text-danger">{{ $message }}</small>
             @enderror
         </div>
-        
         <!-- ตำแหน่ง -->
         <div class="form-group">
-            <label for="position">ตำแหน่ง</label>
+            <label for="title">ตำแหน่ง</label>
+            <input type="text" name="title" class="form-control" value="{{ old('title', $contact->title ?? '') }}">
+            @error('title')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+        
+        <!-- ตำแหน่งบริหาร -->
+        <div class="form-group">
+            <label for="position">ตำแหน่งบริหาร</label>
             <input type="text" name="position" class="form-control" value="{{ old('position', $contact->position ?? '') }}">
             @error('position')
                 <small class="text-danger">{{ $message }}</small>

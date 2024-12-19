@@ -26,14 +26,14 @@
 
         .card-header {
             position: relative;
-            height: 200px;
+            width: 100%; /* กำหนดความกว้างให้เต็มพื้นที่การ์ด */
             overflow: hidden;
         }
 
         .card-header img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+            width: 100%; /* กำหนดให้ภาพกว้างเต็มพื้นที่ของ header */
+            height: auto; /* ความสูงจะปรับตามสัดส่วนของภาพ */
+            display: block;
         }
 
         .profile {
@@ -137,8 +137,9 @@
     <div class="card">
         <!-- Header -->
         <div class="card-header">
-        <img src="{{ asset('storage/' . $contact->profile_image) }}" alt="Profile" class="img-thumbnail mt-2" width="150">
-        </div>
+    <img src="{{ asset('storage/' . $contact->profile_image) }}" alt="Profile Image">
+</div>
+
 
         <!-- Divider -->
         <div class="divider"></div>

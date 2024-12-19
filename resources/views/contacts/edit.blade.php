@@ -40,6 +40,14 @@
             @enderror
         </div>
 
+        <div class="form-group">
+            <label for="title">ตำแหน่ง</label>
+            <input type="text" name="title" class="form-control" value="{{ old('title', $contact->title) }}">
+            @error('title')
+                <small class="text-danger">{{ $message }}</small>
+            @enderror
+        </div>
+
         <!-- ตำแหน่ง -->
         <div class="form-group">
             <label for="position">ตำแหน่ง</label>
