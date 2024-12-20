@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
 
 class ContactController extends Controller
 {
@@ -13,12 +14,64 @@ class ContactController extends Controller
      */
     public function showContactDetails($id)
     {
-        // ดึงข้อมูลผู้ติดต่อโดยใช้ ID
         $contact = Contact::findOrFail($id);
-
+    
+        // สร้างข้อมูล VCF ในรูปแบบ vCard
+        $qrContent = "BEGIN:VCARD\n";
+        $qrContent .= "VERSION:3.0\n";
+        $qrContent .= "FN:{$contact->name}\n"; // ชื่อเต็ม
+        $qrContent .= "TEL;TYPE=CELL,VOICE:{$contact->phone}\n"; // เบอร์โทรศัพท์มือถือ
+        $qrContent .= "EMAIL:{$contact->email}\n"; // อีเมล
+    
+        // ตรวจสอบและกำจัดบรรทัดใหม่ในที่อยู่เพื่อความสะดวกในการแสดง
+        if (!empty($contact->address)) {
+            $address = str_replace("\n", " ", trim($contact->address));
+            $qrContent .= "ADR:;;{$address}\n"; // ที่อยู่
+        }
+    
+        // หากมีชื่อองค์กรให้แสดง
+        if (!empty($contact->organization)) {
+            $qrContent .= "ORG:{$contact->organization}\n"; // ชื่อองค์กร
+        }
+    
+        // แสดงตำแหน่ง (ถ้ามี)
+        if (!empty($contact->position)) {
+            $qrContent .= "TITLE:{$contact->position}\n"; // ตำแหน่ง
+        }
+    
+        // หากมีข้อมูลโซเชียลต่างๆ ก็สามารถเพิ่มเข้าไปได้
+        if (!empty($contact->social)) {
+            foreach ($contact->social as $platform => $url) {
+                $qrContent .= strtoupper($platform) . ":{$url}\n"; // URL ของโซเชียล
+            }
+        }
+    
+    
+        $qrContent .= "END:VCARD"; // จบข้อมูล vCard
+    
+        // ตรวจสอบความยาวข้อมูลใน QR Code และลดขนาดบางส่วนหากยาวเกินไป
+        if (strlen($qrContent) > 1500) {
+            // ลดข้อมูลที่ไม่จำเป็นสำหรับกรณีนี้
+            $qrContent = "BEGIN:VCARD\nVERSION:3.0\n";
+            $qrContent .= "FN:{$contact->name}\n";
+            $qrContent .= "TEL;TYPE=CELL:{$contact->phone}\n";
+            $qrContent .= "EMAIL:{$contact->email}\n";
+            $qrContent .= "END:VCARD";
+        }
+    
+        // สร้าง QR Code พร้อมกับตั้งค่าการ encoding เป็น UTF-8
+        $qrCode = QrCode::size(200)
+            ->encoding('UTF-8')
+            ->errorCorrection('M') // เลือกระดับ Error Correction ระดับกลาง
+            ->generate($qrContent);
+    
         // ส่งข้อมูลไปยัง View
-        return view('contact_detail', compact('contact'));
+        return view('contact_detail', compact('contact', 'qrCode'));
     }
+    
+
+    
+
 
     /**
      * ดาวน์โหลดไฟล์ VCF
