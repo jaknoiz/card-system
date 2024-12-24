@@ -53,7 +53,7 @@
         }
 
         .header img {
-            width: 200px; /* ขยายขนาดโลโก้ */
+            width: 300px; /* ขยายขนาดโลโก้ */
         }
 
         .header .header-text {
@@ -61,7 +61,7 @@
         }
 
         .header .header-text h1 {
-            font-size: 24px;
+            font-size: 30px;
             color: #0078D4;
             font-weight: 600;
         }
@@ -70,7 +70,6 @@
             font-size: 20px;
             color: #ff8c00; /* สีส้ม */
             font-weight: 600;
-            margin-top: 5px;
         }
 
         .profile-info {
