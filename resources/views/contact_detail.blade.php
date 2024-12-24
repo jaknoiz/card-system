@@ -5,173 +5,166 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digital Business Card</title>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
-        body {
-            font-family: 'Prompt', sans-serif;
+        /* General Reset */
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            flex-direction: column;
-            height: 100vh;
-            background-color: #e8eff3; /* Light, cool background */
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0078D4, #00bcd4);
+            padding: 20px;
         }
 
         .card {
-            width: 850px;
-            background-color: #ffffff;
-            border-radius: 15px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            display: flex;
+            width: 100%;
+            max-width: 750px; /* ปรับความกว้างของการ์ด */
+            background: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             overflow: hidden;
-            margin-bottom: 20px;
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px); /* Slight hover effect */
-        }
-
-        .left-section {
-            width: 40%;
             padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border-right: 2px solid #e0e0e0;
-            background-color: #f1f8ff; /* Soft blue background */
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+            animation: fadeIn 1s ease;
         }
 
-        .left-section img {
-            width: 160px;
-            height: 220px;
-            object-fit: cover;
-            
-            border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            transition: transform 0.3s ease;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .left-section img:hover {
-            transform: scale(1.05); /* Zoom effect on image hover */
-        }
-
-        .qr-code {
-            margin-top: 20px;
-        }
-
-        .qr-code img {
-            width: 160px;
-            height: 160px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .qr-code img:hover {
-            transform: scale(1.05); /* Slight zoom on QR code */
-        }
-
-        .right-section {
-            width: 60%;
-            padding: 30px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .university-logo {
+        .header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: space-between; /* จัดให้อยู่ซ้าย-ขวา */
+            margin-bottom: 20px;
         }
 
-        .university-logo img {
-            width: 200px;
-            transition: transform 0.3s ease;
+        .header img {
+            width: 200px; /* ขยายขนาดโลโก้ */
         }
 
-        .university-logo img:hover {
-            transform: scale(1.05); /* Hover effect on logo */
+        .header .header-text {
+            text-align: right; /* จัดข้อความให้อยู่ขวา */
         }
 
-        .university-title {
-            text-align: right;
-        }
-
-        .university-title h2 {
+        .header .header-text h1 {
             font-size: 24px;
-            margin: 0;
             color: #0078D4;
             font-weight: 600;
         }
 
-        .university-title p {
-            font-size: 16px;
-            margin: 0;
-            color: #f28000;
-            font-weight: 500;
+        .header .header-text h2 {
+            font-size: 20px;
+            color: #ff8c00; /* สีส้ม */
+            font-weight: 600;
+            margin-top: 5px;
         }
 
         .profile-info {
-            margin-top: 20px;
-            font-size: 18px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-info img {
+            width: 250px;
+            height: 300px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .profile-info img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.3);
         }
 
         .profile-info h2 {
-            font-size: 28px;
+            font-size: 30px;
+            margin: 10px 0;
             color: #333;
-            margin-bottom: 5px;
+            font-weight: 600;
         }
 
         .profile-info p {
             font-size: 18px;
-            margin: 4px 0;
             color: #555;
+            margin: 5px 0;
+            font-weight: 500;
         }
 
         .contact-info {
-            margin-top: 20px;
+            margin: 30px auto;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
         }
 
         .contact-info div {
             display: flex;
             align-items: center;
-            margin-bottom: 10px;
             font-size: 16px;
             color: #666;
+            gap: 10px;
+            background: #f5f5f5;
+            padding: 10px 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .contact-info div:hover {
+            transform: scale(1.05);
         }
 
         .contact-info div img {
-            width: 22px;
-            height: 22px;
-            margin-right: 12px;
-            
-        }
-
-        .contact-info div img:hover {
-            filter: grayscale(0);
+            width: 24px;
+            height: 24px;
         }
 
         .social-icons {
             display: flex;
-            justify-content: flex-start;
+            justify-content: center;
             gap: 15px;
-            margin-top: 15px;
+            margin-top: 25px;
         }
 
         .social-icons a img {
-            width: 35px;
-            height: 35px;
-            transition: transform 0.3s ease;
+            width: 40px;
+            height: 40px;
+            transition: transform 0.3s ease, filter 0.3s ease;
         }
 
         .social-icons a img:hover {
             transform: scale(1.2);
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+        }
+
+        .qr-code {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .qr-code img {
+            width: 150px;
+            height: 150px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .save-button {
@@ -181,81 +174,67 @@
 
         .btn {
             display: inline-block;
-            background-color: #007bff;
+            background: linear-gradient(135deg, #0078D4, #0056b3);
             color: #fff;
             text-decoration: none;
             padding: 12px 30px;
-            border-radius: 8px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-size: 18px;
             font-weight: bold;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .btn:hover {
-            background-color: #0056b3;
-            transform: translateY(-3px); /* Button hover effect */
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-
     </style>
 </head>
 <body>
     <div class="card">
-        <!-- Left Section -->
-        <div class="left-section">
-            <img src="{{ asset('storage/' . $contact->profile_image) }}" alt="Profile Image">
-            <div class="qr-code">
-                {!! $qrCode !!}
+        <!-- Header -->
+        <div class="header">
+            <img src="{{ asset('image/tsu-logo.png') }}" alt="University Logo">
+            <div class="header-text">
+                <h1>นามบัตรดิจิทัล</h1>
+                <h2>DIGITAL BUSINESS CARD</h2>
             </div>
         </div>
 
-        <!-- Right Section -->
-        <div class="right-section">
-            <!-- University Header -->
-            <div class="university-logo">
-                <img src="{{ asset('image/tsu-logo.png') }}" alt="University Logo">
-                <div class="university-title">
-                    <h2>นามบัตรดิจิทัล</h2>
-                    <p>DIGITAL BUSINESS CARD</p>
+        <!-- Profile Information -->
+        <div class="profile-info">
+            <img src="{{ asset('storage/' . $contact->profile_image) }}" alt="Profile Image">
+            <h2>{{ $contact['name'] }}</h2>
+            <p>{{ $contact['title'] }}</p>
+            <p>{{ $contact['position'] }}</p>
+        </div>
+
+        <!-- Contact Information -->
+        <div class="contact-info">
+            @if(!empty($contact['email']))
+                <div>
+                    <img src="{{ asset('image/email-icon.png') }}" alt="Email Icon"> {{ $contact['email'] }}
                 </div>
-            </div>
-
-            <!-- Profile Information -->
-            <div class="profile-info">
-                <h2>{{ $contact['name'] }}</h2>
-                <p>{{ $contact['title'] }}</p>
-                <p>{{ $contact['position'] }}</p>
-            </div>
-
-            <!-- Contact Information -->
-            <div class="contact-info">
-                @if(!empty($contact['email']))
-                    <div>
-                        <img src="{{ asset('image/email-icon.png') }}" alt="Email Icon"> {{ $contact['email'] }}
-                    </div>
-                @endif
-
-                @if(!empty($contact['phone']))
-                    <div>
-                        <img src="{{ asset('image/phone-icon.png') }}" alt="Phone Icon"> {{ $contact['phone'] }}
-                    </div>
-                @endif
-
-                @if(!empty($contact['office_phone']))
+            @endif
+            @if(!empty($contact['phone']))
+                <div>
+                    <img src="{{ asset('image/phone-icon.png') }}" alt="Phone Icon"> {{ $contact['phone'] }}
+                </div>
+            @endif
+            @if(!empty($contact['office_phone']))
                     <div>
                         <img src="{{ asset('image/old-phone.png') }}" alt="Office Phone Icon"> {{ $contact['office_phone'] }}
                     </div>
                 @endif
+            @if(!empty($contact['address']))
+                <div>
+                    <img src="{{ asset('image/address-icon.png') }}" alt="Address Icon"> {{ $contact['address'] }}
+                </div>
+            @endif
+        </div>
 
-                @if(!empty($contact['address']))
-                    <div>
-                        <img src="{{ asset('image/address-icon.png') }}" alt="Address Icon"> {{ $contact['address'] }}
-                    </div>
-                @endif
-            </div>
-
-            <!-- Social Icons -->
-            <div class="social-icons">
+         <!-- Social Icons -->
+         <div class="social-icons">
                 @if(isset($contact['social']['line']))
                     <a href="{{ $contact['social']['line'] }}" target="_blank">
                         <img src="{{ asset('image/line-icon.png') }}" alt="Line">
@@ -292,12 +271,16 @@
                     </a>
                 @endif
             </div>
-        </div>
-    </div>
 
-    <!-- Save Button Outside the Card -->
-    <div class="save-button">
-        <a href="{{ route('contact.download', $contact['id']) }}" class="btn">บันทึกผู้ติดต่อ</a>
+        <!-- QR Code -->
+        <div class="qr-code">
+            {!! $qrCode !!}
+        </div>
+
+        <!-- Save Button -->
+        <div class="save-button">
+            <a href="{{ route('contact.download', $contact['id']) }}" class="btn">บันทึกผู้ติดต่อ</a>
+        </div>
     </div>
 </body>
 </html>

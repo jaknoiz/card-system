@@ -22,36 +22,38 @@ class ContactController extends Controller
         $qrContent .= "FN:{$contact->name}\n"; // ชื่อเต็ม
         $qrContent .= "TEL;TYPE=CELL,VOICE:{$contact->phone}\n"; // เบอร์โทรศัพท์มือถือ
         $qrContent .= "EMAIL:{$contact->email}\n"; // อีเมล
-    
-        // ตรวจสอบและกำจัดบรรทัดใหม่ในที่อยู่เพื่อความสะดวกในการแสดง
+
+        if (!empty($contact->office_phone)) {
+            $officePhone = trim($contact->office_phone);
+            $qrContent .= "TEL:{$officePhone}\n"; // เบอร์โทรสำนักงาน
+        }
+        
         if (!empty($contact->address)) {
             $address = str_replace("\n", " ", trim($contact->address));
             $qrContent .= "ADR:;;{$address}\n"; // ที่อยู่
         }
+        
     
-        // หากมีชื่อองค์กรให้แสดง
-        if (!empty($contact->organization)) {
-            $qrContent .= "ORG:{$contact->organization}\n"; // ชื่อองค์กร
-        }
+        // เพิ่มข้อมูลโซเชียลใน vCard หากมีค่าในฐานข้อมูล
+        $socialLinks = [
+            'line' => $contact->social['line'] ?? null,
+            'facebook' => $contact->social['facebook'] ?? null,
+            'youtube' => $contact->social['youtube'] ?? null,
+            'instagram' => $contact->social['instagram'] ?? null,
+            'twitter' => $contact->social['twitter'] ?? null,
+            'linkedin' => $contact->social['linkedin'] ?? null,
+        ];
     
-        // แสดงตำแหน่ง (ถ้ามี)
-        if (!empty($contact->position)) {
-            $qrContent .= "TITLE:{$contact->position}\n"; // ตำแหน่ง
-        }
-    
-        // หากมีข้อมูลโซเชียลต่างๆ ก็สามารถเพิ่มเข้าไปได้
-        if (!empty($contact->social)) {
-            foreach ($contact->social as $platform => $url) {
-                $qrContent .= strtoupper($platform) . ":{$url}\n"; // URL ของโซเชียล
+        foreach ($socialLinks as $platform => $url) {
+            if (!empty($url)) {
+                $qrContent .= "X-SOCIALPROFILE;TYPE={$platform}:{$url}\n";
             }
         }
-    
     
         $qrContent .= "END:VCARD"; // จบข้อมูล vCard
     
         // ตรวจสอบความยาวข้อมูลใน QR Code และลดขนาดบางส่วนหากยาวเกินไป
         if (strlen($qrContent) > 1500) {
-            // ลดข้อมูลที่ไม่จำเป็นสำหรับกรณีนี้
             $qrContent = "BEGIN:VCARD\nVERSION:3.0\n";
             $qrContent .= "FN:{$contact->name}\n";
             $qrContent .= "TEL;TYPE=CELL:{$contact->phone}\n";
@@ -59,15 +61,19 @@ class ContactController extends Controller
             $qrContent .= "END:VCARD";
         }
     
-        // สร้าง QR Code พร้อมกับตั้งค่าการ encoding เป็น UTF-8
-        $qrCode = QrCode::size(200)
-            ->encoding('UTF-8')
-            ->errorCorrection('M') // เลือกระดับ Error Correction ระดับกลาง
+        // สร้าง QR Code โดยใช้การเข้ารหัสเป็น UTF-8
+        $qrCode = QrCode::size(150) // ขนาด QR Code
+            ->encoding('UTF-8') // ใช้ UTF-8 เพื่อรองรับตัวอักษรที่หลากหลาย
+            ->errorCorrection('L') // ใช้การแก้ไขข้อผิดพลาดระดับต่ำ (ลดความซับซ้อน)
             ->generate($qrContent);
     
         // ส่งข้อมูลไปยัง View
         return view('contact_detail', compact('contact', 'qrCode'));
     }
+    
+    
+
+
     
 
     
@@ -137,22 +143,26 @@ private function generateVCF(Contact $contact): string
 
 
 
-    // แสดงหน้ารายการเจ้าหน้าที่พร้อมค้นหา/กรอง
-    public function showContacts(Request $request)
-    {
-        $query = Contact::query();
+// แสดงหน้ารายการเจ้าหน้าที่พร้อมค้นหา/กรอง
+public function showContacts(Request $request)
+{
+    $query = Contact::query();
 
-        // ฟิลเตอร์การค้นหา
-        if ($request->filled('keyword')) {
-            $query->where('name', 'like', '%' . $request->keyword . '%')
-                ->orWhere('email', 'like', '%' . $request->keyword . '%');
-        }
-
-        // ดึงข้อมูลพร้อม paginate
-        $contacts = $query->orderBy('name')->paginate(10);
-
-        return view('contacts.index', compact('contacts'));
+    // ฟิลเตอร์การค้นหาจากคีย์เวิร์ด (ชื่อ, อีเมล)
+    if ($request->filled('keyword')) {
+        $query->where(function($q) use ($request) {
+            $q->where('name', 'like', '%' . $request->keyword . '%')
+              ->orWhere('email', 'like', '%' . $request->keyword . '%')
+              ->orWhere('phone', 'like', '%' . $request->keyword . '%'); // หากต้องการค้นหาเบอร์โทร
+        });
     }
+
+    // ดึงข้อมูลพร้อม paginate และจัดเรียงตามชื่อ
+    $contacts = $query->orderBy('name')->paginate(10);
+
+    return view('contacts.index', compact('contacts'));
+}
+
 
     // แสดงหน้าสร้างเจ้าหน้าที่
     public function create()
