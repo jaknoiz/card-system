@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'ระบบนามบัตรดิจิทัล')</title>
+     <!-- เพิ่ม Favicon -->
+     <link rel="icon" type="image/png" href="{{ asset('image/tsu.png') }}">
     <!-- เพิ่ม Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <!-- เพิ่มฟอนต์ Prompt -->

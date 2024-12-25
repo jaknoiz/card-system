@@ -39,7 +39,7 @@
                         <td>{{ $contact->phone }}</td>
                         <td class="text-center">
                             <a href="{{ route('contacts.show', $contact->id) }}" class="btn btn-info btn-sm">
-                                <i class="fas fa-eye"></i> ดูรายละเอียด
+                                <i class="fas fa-eye"></i> ดูนามบัตรดิจิทัล
                             </a>
                             <a href="{{ route('contacts.edit', $contact->id) }}" class="btn btn-warning btn-sm">
                                 <i class="fas fa-edit"></i> แก้ไข
